@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:isar_db_app/collections/category.dart';
@@ -192,12 +194,18 @@ class _CreateRoutineState extends State<CreateRoutine> {
 //create category record
   _addCategory(Isar isar) async {
     final categories = isar.categorys;
-
+    bool result = false;
     final newCategory = Category()..category = _newCatController.text;
-    await isar.writeTxn(() async {
+    result = await isar.writeTxn(() async {
       await categories.put(newCategory);
+      return true;
     });
-
+    if (result) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Category Created!")));
+      Navigator.pop(context);
+    }
     _newCatController.clear();
     _readCategory();
   }
@@ -213,15 +221,21 @@ class _CreateRoutineState extends State<CreateRoutine> {
 
   addRoutine() async {
     final routineCollection = widget.isar.routines;
+    bool result = false;
     final newRoutine = Routine()
       ..title = _titleController.text
       ..startTime = _timeController.text
       ..day = dropdownDay
       ..category.value = dropdownValue;
-    await widget.isar.writeTxn(() async {
+    result = await widget.isar.writeTxn(() async {
       await routineCollection.put(newRoutine);
+      return true;
     });
-
+    if (result) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Routine Created!")));
+    }
     _titleController.clear();
     _timeController.clear();
     setState(() {

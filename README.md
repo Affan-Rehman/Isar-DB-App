@@ -1,3 +1,3 @@
 # isar_db_app
 
-A new Flutter project.
+Practicing isar database.

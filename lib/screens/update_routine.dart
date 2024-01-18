@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:isar_db_app/collections/category.dart';
 import 'package:isar_db_app/collections/routine.dart';
-import 'package:isar_db_app/screens/create_routine.dart';
+import 'package:isar_db_app/main.dart';
 
 class UpdateRoutine extends StatefulWidget {
   final Isar isar;
@@ -255,19 +255,35 @@ class _UpdateRoutineState extends State<UpdateRoutine> {
 
       await routineCollection.put(routine);
 
-      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (_) => MainPage(
+                  isar: widget.isar,
+                )),
+        (route) => false,
+      );
     });
   }
 
   deleteRoutine() async {
     final routineCollection = widget.isar.routines;
+    bool result = false;
     await widget.isar.writeTxn(() async {
-      routineCollection.delete(widget.routine.id);
+      result = await routineCollection.delete(widget.routine.id);
     });
-
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CreateRoutine(isar: widget.isar)));
+    if (result) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Routine deleted!")));
+    }
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+          builder: (_) => MainPage(
+                isar: widget.isar,
+              )),
+      (route) => false,
+    );
   }
 }

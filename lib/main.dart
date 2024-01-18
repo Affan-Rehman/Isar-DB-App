@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:isar_db_app/collections/category.dart';
 import 'package:isar_db_app/collections/routine.dart';
+import 'package:isar_db_app/screens/update_routine.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:isar_db_app/screens/create_routine.dart';
 
@@ -85,42 +86,49 @@ class _MainPageState extends State<MainPage> {
       x.add(Card(
         elevation: 4.0,
         child: ListTile(
-            title:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 5.0, bottom: 2.0),
-                child: Text(
-                  routines![i].title,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
+          title:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 5.0, bottom: 2.0),
+              child: Text(
+                routines![i].title,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 5.0),
-                child: RichText(
-                    text: TextSpan(
-                        style: const TextStyle(color: Colors.black),
-                        children: [
-                      const WidgetSpan(child: Icon(Icons.schedule, size: 16)),
-                      TextSpan(text: routines![i].startTime)
-                    ])),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 5.0),
-                child: RichText(
-                    text: TextSpan(
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 12),
-                        children: [
-                      const WidgetSpan(
-                          child: Icon(
-                        Icons.calendar_month,
-                        size: 16,
-                      )),
-                      TextSpan(text: routines![i].day)
-                    ])),
-              )
-            ]),
-            trailing: const Icon(Icons.keyboard_arrow_right)),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5.0),
+              child: RichText(
+                  text: TextSpan(
+                      style: const TextStyle(color: Colors.black),
+                      children: [
+                    const WidgetSpan(child: Icon(Icons.schedule, size: 16)),
+                    TextSpan(text: routines![i].startTime)
+                  ])),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5.0),
+              child: RichText(
+                  text: TextSpan(
+                      style: const TextStyle(color: Colors.black, fontSize: 12),
+                      children: [
+                    const WidgetSpan(
+                        child: Icon(
+                      Icons.calendar_month,
+                      size: 16,
+                    )),
+                    TextSpan(text: routines![i].day)
+                  ])),
+            )
+          ]),
+          trailing: const Icon(Icons.keyboard_arrow_right),
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => UpdateRoutine(
+                        isar: widget.isar, routine: routines![i])));
+          },
+        ),
       ));
     }
     return x;
