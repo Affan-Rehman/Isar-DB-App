@@ -20,5 +20,5 @@ class Routine {
   @Index(caseSensitive: false)
   late String day;
   @Index() //records arranged according to this
-  late DateTime date;
+  late String startTime;
 }
